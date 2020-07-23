@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 
 app = Flask(__name__)
+app.secret_key = 'ph' #secrect key necessario para utilizar o session
+
 class Jogo:
     def __init__(self, nome, categoria, console):
         self.nome = nome
@@ -26,6 +28,26 @@ def criar():
     console = request.form['console']
     jogo = Jogo(nome, categoria, console)
     lista.append(jogo)
+    return redirect('/')
+
+@app.route('/login')
+def login():
+    return render_template('login.html', titulo="Login")
+
+@app.route('/autenticar', methods=['POST'])
+def autenticar():
+    if request.form['senha'] == 'mestra':
+        session['usuario_logado'] = request.form['usuario']
+        flash(request.form['usuario'] + ' Logou com sucesso!')
+        return redirect('/')
+    else:
+        flash('Não logado, tente novamente')
+        return redirect('/login')
+
+@app.route('/logout')
+def logout():
+    session['usuario_logado'] = None
+    flash('Usuario deslogado')
     return redirect('/')
 
 app.run(host='127.0.0.1', port=8000, debug=True)                                                        

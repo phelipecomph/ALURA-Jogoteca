@@ -1,0 +1,7 @@
+{
+    "name": "alura-jogoteca",
+    "author": "phelipecomph",
+    "dependencies": {
+      "flask":"^0.12.2"
+    }
+}
